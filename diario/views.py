@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .models import EntradaDiario, Tarefa
+from .services import Tarefas
 from django.utils import timezone
 from datetime import datetime, date
 import json
@@ -181,3 +182,7 @@ def pagina_diario(request):
     }
 
     return render(request, 'index.html', context)
+
+@csrf_exempt
+def definir_tarefas_futuras(request):
+    return Tarefas.definir_tarefas_futuras(request)
