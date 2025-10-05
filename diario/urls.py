@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views, services
 
 urlpatterns = [
     path('', views.pagina_diario, name='pagina_diario'),
@@ -8,4 +8,5 @@ urlpatterns = [
     path('api/tarefa/atualizar-descricao/', views.atualizar_descricao),
     path('api/tarefa/remover/', views.remover_tarefa),
     path('api/diario/campos-reflexao/', views.campos_gratidao),
+    path('api/diario/tarefas-futuras/', views.definir_tarefas_futuras),
 ]
