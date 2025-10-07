@@ -1,25 +1,75 @@
+from json import JSONDecodeError
 from django.core.exceptions import ValidationError
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from .models import EntradaDiario, Tarefa
+from django.utils import timezone
+from datetime import datetime, date
+import json
 from django.http import JsonResponse
-from django.utils import timezone, dates
-from datetime import datetime, timedelta, time, date
-from .models import EntradaDiario
+from .serializers import Validators
 
-class Validators:
+class Tarefas:
+    @staticmethod
+    def definir_tarefas_futuras(request):
+        if request.method == "POST":
+            try:
+                data = json.loads(request.body)
+                date = data.get("date")
+                """if not date:
+                    return JsonResponse({"error": "Nenhuma data selecionada"})"""
+                #troquei o validate_date_df por validate_date_consulta pra fazer um teste. mas tenho que voltar dps por validate_date_df
+                date_formatado = Validators.validate_date_consulta(date)
+
+                tipo = data.get('tarefa_tipo')
+                if tipo not in ['PR', 'SC']: #tarefa pra vc fazer dps: crie uma validação para tipos de tarefas no serializers.py
+                    return JsonResponse({'error': 'Tipo desconhecido'}, status=400)
+
+                descricao = data.get('descricao')
+                #validate_date = Validators.validate_date(date)
+
+                entrada, created = EntradaDiario.objects.get_or_create(data=date_formatado)
+                tarefa_add = Tarefa.objects.create(entrada_diario=entrada, tipo=tipo, descricao=descricao)
+
+                return JsonResponse({
+                    'mensagem': 'Tarefa adicionada.',
+                    'id': tarefa_add.id,
+                    'entrada_diario': tarefa_add.entrada_diario.id,
+                    'tipo': tarefa_add.tipo,
+                    'descricao': tarefa_add.descricao,
+                })
+
+            except JSONDecodeError:
+                return JsonResponse({"error": "JSONDecodeError"}, status=400)
+        else:
+            return JsonResponse({
+                'mensagem': 'Metodo não permitido.',
+            })
 
     @staticmethod
-    def validate_date(data):
-        if not data:
-            raise ValidationError({'mensagem': 'Data no formato incorreto!'})
-        try:
-            data_formatada = datetime.strptime(data, '%d/%m/%Y').date()
-            hoje = date.today()
-            if data_formatada <= hoje:
-                raise ValidationError({'mensagem': 'A data deve ser futura!'})
+    def consultar_dias(request):
+        if request.method == "GET":
+            try:
+                date_params = request.GET.get("date")
+                date_formatado = Validators.validate_date_consulta(date_params)
 
-            dates_bd = EntradaDiario.objects.filter(data__gte=hoje).values_list('data', flat=True)
-            if data_formatada in dates_bd:
-                raise ValidationError({'mensagem': 'Já existe uma data cadastrada!'})
+                date_bd = EntradaDiario.objects.filter(data=date_formatado).first()
+                if date_bd is None:
+                    return JsonResponse({"error": "Não há tarefas para esse dia!"})
+                id_date = date_bd.id
 
-            return data_formatada
-        except ValueError as e:
-            return ValidationError({'mensagem': str(e)})
+                list_tarefas = []
+                tarefas = Tarefa.objects.filter(entrada_diario_id=id_date).values("id", "tipo", "descricao", "concluida")
+                for tarefa in tarefas:
+                    dict_tarefa = {
+                        'id': tarefa['id'],
+                        'tipo': tarefa['tipo'],
+                        'descricao': tarefa['descricao'],
+                        'concluida': tarefa['concluida'],
+                    }
+                    list_tarefas.append(dict_tarefa)
+                return JsonResponse({f"Tarefas do dia {date_formatado.strftime('%d/%m/%Y')}": list_tarefas})
+            except ValidationError:
+                return JsonResponse({"error": "Nenhuma data selecionada"})
+        else:
+            return JsonResponse({"error": "Nenhuma data selecionada"})
