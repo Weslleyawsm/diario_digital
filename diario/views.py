@@ -1,1055 +1,192 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diário Pessoal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        .btn-consultar {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-family: 'Caveat', cursive;
-            transition: background 0.3s;
-            margin-left: 10px;
-        }
-
-        .btn-consultar:hover {
-            background: #229954;
-        }
-
-        .tarefas-consultadas-info {
-            background: #3a3a2f;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-            color: #ffd700;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Caveat', cursive;
-            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-
-        .diario-container {
-            background: #1e1e1e;
-            width: 100%;
-            max-width: 900px;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-            padding: 40px;
-            color: #e0e0e0;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .data-dia {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: #e0e0e0;
-        }
-
-        .titulo {
-            font-size: 48px;
-            font-weight: bold;
-            margin: 20px 0;
-            letter-spacing: 2px;
-            color: #ffffff;
-        }
-
-        .frase-inspiradora {
-            font-size: 18px;
-            font-style: italic;
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            color: #b0b0b0;
-        }
-
-        .divisor {
-            height: 2px;
-            background: #444;
-            margin: 20px 0;
-        }
-
-        .tarefas-container {
-            display: flex;
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .tarefas-secao {
-            flex: 1;
-            background: #2d2d2d;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        .tarefas-titulo {
-            font-size: 14px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            color: #888;
-        }
-
-        .tarefas-header {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #ffffff;
-        }
-
-        .tarefa-item {
-            display: flex;
-            align-items: center;
-            margin: 15px 0;
-            gap: 10px;
-        }
-
-        .checkbox {
-            width: 30px;
-            height: 30px;
-            border: 3px solid #666;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: #ffffff;
-        }
-
-        .checkbox.checked::after {
-            content: '✓';
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .tarefa-texto {
-            flex: 1;
-            font-size: 20px;
-            padding: 5px;
-            border: none;
-            border-bottom: 2px solid transparent;
-            background: transparent;
-            font-family: 'Caveat', cursive;
-            transition: border-color 0.3s;
-            color: #e0e0e0;
-        }
-
-        .tarefa-texto:focus {
-            outline: none;
-            border-bottom: 2px solid #667eea;
-        }
-
-        .btn-remover {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            font-family: 'Caveat', cursive;
-        }
-
-        .btn-remover:hover {
-            background: #c0392b;
-        }
-
-        .btn-adicionar {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 18px;
-            font-family: 'Caveat', cursive;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .btn-adicionar:hover {
-            background: #5568d3;
-        }
-
-        .reflexao-container {
-            margin: 30px 0;
-        }
-
-        .campo-reflexao {
-            margin: 20px 0;
-        }
-
-        .campo-label {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #ffffff;
-        }
-
-        .campo-input {
-            width: 100%;
-            font-size: 20px;
-            padding: 10px;
-            border: none;
-            border-bottom: 2px solid #555;
-            background: transparent;
-            font-family: 'Caveat', cursive;
-            color: #e0e0e0;
-        }
-
-        .campo-input:focus {
-            outline: none;
-            border-bottom: 2px solid #667eea;
-        }
-
-        .pontuacao-container {
-            text-align: center;
-            margin: 30px 0;
-            padding: 20px;
-            background: #2d2d2d;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        .pontuacao-titulo {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #ffffff;
-        }
-
-        .pontuacao-valor {
-            font-size: 48px;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .gratidao-reflexao {
-            display: flex;
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .secao-final {
-            flex: 1;
-            background: #2d2d2d;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        .secao-titulo {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #ffffff;
-        }
-
-        .texto-area {
-            width: 100%;
-            min-height: 120px;
-            font-size: 20px;
-            padding: 10px;
-            border: none;
-            background: transparent;
-            font-family: 'Caveat', cursive;
-            resize: vertical;
-            color: #e0e0e0;
-        }
-
-        .texto-area:focus {
-            outline: none;
-        }
-
-        @media (max-width: 768px) {
-            .tarefas-container,
-            .gratidao-reflexao {
-                flex-direction: column;
-            }
-
-            .diario-container {
-                padding: 20px;
-            }
-        }
-
-        .btn-planejar {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-family: 'Caveat', cursive;
-            transition: background 0.3s;
-        }
-
-        .btn-planejar:hover {
-            background: #5568d3;
-        }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-overlay.ativo {
-            display: flex;
-        }
-
-        .modal-container {
-            background: #1e1e1e;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            border-radius: 15px;
-            padding: 30px;
-            position: relative;
-            overflow-y: auto;
-            color: #e0e0e0;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-titulo {
-            font-size: 32px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-
-        .btn-fechar {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            font-family: 'Caveat', cursive;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-fechar:hover {
-            background: #c0392b;
-        }
-
-        .seletor-data-container {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .seletor-data-label {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #ffffff;
-        }
-
-        .seletor-data {
-            width: 100%;
-            max-width: 300px;
-            font-size: 20px;
-            padding: 10px;
-            border: 2px solid #555;
-            border-radius: 8px;
-            background: #2d2d2d;
-            font-family: 'Caveat', cursive;
-            cursor: pointer;
-            color: #e0e0e0;
-        }
-
-        .seletor-data:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .modal-tarefas-container {
-            display: flex;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .mensagem-sucesso {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #27ae60;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            font-size: 18px;
-            font-family: 'Caveat', cursive;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            z-index: 2000;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="diario-container">
-        <div class="header">
-            <div class="data-dia">
-                <div>
-                    <span>Data: <strong id="data-atual"></strong></span>
-                    <span style="margin-left: 20px;">Dia: <strong id="dia-numero"></strong></span>
-                </div>
-                <button class="btn-planejar" onclick="abrirModalPlanejamento()">Planejar Dia Futuro</button>
-                <button class="btn-consultar" onclick="abrirModalConsultar()">Consultar Tarefas</button>
-            </div>
-            <div class="titulo">DIÁRIO</div>
-            <div class="frase-inspiradora">
-                "A vida é definida por como você reage aos desafios, não pelos desafios em si."
-            </div>
-        </div>
-
-        <div class="divisor"></div>
-
-        <div class="tarefas-container">
-            <div class="tarefas-secao">
-                <div class="tarefas-titulo">3 pontos por tarefa completada</div>
-                <div class="tarefas-header">Tarefas Principais</div>
-                <div id="tarefas-principais"></div>
-                <button class="btn-adicionar" onclick="adicionarTarefa('PR')">+ Adicionar Tarefa Principal</button>
-            </div>
-
-            <div class="tarefas-secao">
-                <div class="tarefas-titulo">1 ponto por tarefa completada</div>
-                <div class="tarefas-header">Tarefas Secundárias</div>
-                <div id="tarefas-secundarias"></div>
-                <button class="btn-adicionar" onclick="adicionarTarefa('SC')">+ Adicionar Tarefa Secundária</button>
-            </div>
-        </div>
-
-        <div class="reflexao-container">
-            <div class="campo-reflexao">
-                <div class="campo-label">Preciso melhorar em:</div>
-                <input type="text" class="campo-input" id="preciso-melhorar"
-                       value="{{ entrada.preciso_melhorar_em }}"
-                       onblur="salvarCamposReflexao()">
-            </div>
-            <div class="campo-reflexao">
-                <div class="campo-label">Uma coisa que me orgulho:</div>
-                <input type="text" class="campo-input" id="orgulho"
-                       value="{{ entrada.coisa_que_me_orgulho }}"
-                       onblur="salvarCamposReflexao()">
-            </div>
-        </div>
-
-        <div class="pontuacao-container">
-            <div class="pontuacao-titulo">PONTUAÇÃO</div>
-            <div class="pontuacao-valor" id="pontuacao">{{ pontuacao.pontos_conquistados }} / {{ pontuacao.pontos_maximos }}</div>
-        </div>
-
-        <div class="gratidao-reflexao">
-            <div class="secao-final">
-                <div class="secao-titulo">Sou grato(a) por...</div>
-                <textarea class="texto-area" id="gratidao"
-                          onblur="salvarCamposReflexao()">{{ entrada.gratidao }}</textarea>
-            </div>
-            <div class="secao-final">
-                <div class="secao-titulo">Reflexão</div>
-                <textarea class="texto-area" id="reflexao"
-                          onblur="salvarCamposReflexao()">{{ entrada.reflexao }}</textarea>
-            </div>
-        </div>
-    </div>
-        <!-- Modal Planejar Dia Futuro -->
-    <div class="modal-overlay" id="modal-planejamento">
-        <div class="modal-container">
-            <div class="modal-header">
-                <div class="modal-titulo">Planejar Dia Futuro</div>
-                <button class="btn-fechar" onclick="fecharModalPlanejamento()">✕</button>
-            </div>
-
-            <div class="seletor-data-container">
-                <div class="seletor-data-label">Selecione a data:</div>
-                <input type="date" class="seletor-data" id="data-futura">
-            </div>
-
-            <div class="divisor"></div>
-
-            <div class="modal-tarefas-container">
-                <div class="tarefas-secao">
-                    <div class="tarefas-titulo">3 pontos por tarefa completada</div>
-                    <div class="tarefas-header">Tarefas Principais</div>
-                    <div id="tarefas-principais-modal"></div>
-                    <button class="btn-adicionar" onclick="adicionarTarefaFutura('PR')">+ Adicionar Tarefa Principal</button>
-                </div>
-
-                <div class="tarefas-secao">
-                    <div class="tarefas-titulo">1 ponto por tarefa completada</div>
-                    <div class="tarefas-header">Tarefas Secundárias</div>
-                    <div id="tarefas-secundarias-modal"></div>
-                    <button class="btn-adicionar" onclick="adicionarTarefaFutura('SC')">+ Adicionar Tarefa Secundária</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-overlay" id="modal-consultar">
-        <div class="modal-container">
-            <div class="modal-header">
-                <div class="modal-titulo">Consultar Tarefas</div>
-                <button class="btn-fechar" onclick="fecharModalConsultar()">✕</button>
-            </div>
-
-            <div class="seletor-data-container">
-                <div class="seletor-data-label">Selecione a data:</div>
-                <input type="date" class="seletor-data" id="data-consultar" onchange="buscarTarefasData()">
-            </div>
-
-            <div id="info-data-consultada"></div>
-
-            <div class="divisor"></div>
-
-            <div class="modal-tarefas-container">
-                <div class="tarefas-secao">
-                    <div class="tarefas-titulo">3 pontos por tarefa completada</div>
-                    <div class="tarefas-header">Tarefas Principais</div>
-                    <div id="tarefas-principais-consultar"></div>
-                    <button class="btn-adicionar" onclick="adicionarTarefaConsultar('PR')">+ Adicionar Tarefa Principal</button>
-                </div>
-
-                <div class="tarefas-secao">
-                    <div class="tarefas-titulo">1 ponto por tarefa completada</div>
-                    <div class="tarefas-header">Tarefas Secundárias</div>
-                    <div id="tarefas-secundarias-consultar"></div>
-                    <button class="btn-adicionar" onclick="adicionarTarefaConsultar('SC')">+ Adicionar Tarefa Secundária</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <script>
-        const ENTRADA_ID = {{ entrada.id }};
-
-        // Atualizar data automaticamente
-        function atualizarData() {
-            const hoje = new Date();
-            const dia = String(hoje.getDate()).padStart(2, '0');
-            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-            const ano = String(hoje.getFullYear()).slice(-2);
-
-            document.getElementById('data-atual').textContent = `${dia}/${mes}/${ano}`;
-
-            const inicioDo = new Date(hoje.getFullYear(), 0, 1);
-            const diferencaDias = Math.floor((hoje - inicioDo) / (1000 * 60 * 60 * 24));
-            document.getElementById('dia-numero').textContent = diferencaDias + 1;
-        }
-
-        // Adicionar nova tarefa
-        async function adicionarTarefa(tipo) {
-            try {
-                const response = await fetch('/api/tarefa/adicionar/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({tipo: tipo, descricao: ''})
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    renderizarTarefa(data, tipo);
-                    atualizarPontuacao();
-                }
-            } catch (error) {
-                console.error('Erro ao adicionar tarefa:', error);
-            }
-        }
-
-        // Renderizar tarefa na tela
-        function renderizarTarefa(tarefa, tipo) {
-            const container = tipo === 'PR' ?
-                document.getElementById('tarefas-principais') :
-                document.getElementById('tarefas-secundarias');
-
-            const tarefaDiv = document.createElement('div');
-            tarefaDiv.className = 'tarefa-item';
-            tarefaDiv.dataset.id = tarefa.id;
-
-            tarefaDiv.innerHTML = `
-                <div class="checkbox ${tarefa.concluida ? 'checked' : ''}"
-                     onclick="toggleCheck(this, ${tarefa.id})"></div>
-                <input type="text" class="tarefa-texto"
-                       value="${tarefa.descricao}"
-                       onblur="atualizarDescricao(${tarefa.id}, this.value)"
-                       placeholder="Digite a tarefa...">
-                <button class="btn-remover" onclick="removerTarefa(${tarefa.id})">✕</button>
-            `;
-
-            container.appendChild(tarefaDiv);
-        }
-
-        // Remover tarefa
-        async function removerTarefa(id) {
-            try {
-                const response = await fetch('/api/tarefa/remover/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({id: id})
-                });
-
-                if (response.ok) {
-                    document.querySelector(`[data-id="${id}"]`).remove();
-                    atualizarPontuacao();
-                }
-            } catch (error) {
-                console.error('Erro ao remover tarefa:', error);
-            }
-        }
-
-        // Toggle checkbox
-        async function toggleCheck(element, id) {
-            try {
-                // Pega o estado ATUAL do checkbox na tela
-                const estaChecado = element.classList.contains('checked');
-
-                const response = await fetch('/api/tarefa/toggle/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({id: id, concluida: estaChecado})
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    if (data.concluida) {
-                        element.classList.add('checked');
-                    } else {
-                        element.classList.remove('checked');
-                    }
-                    atualizarPontuacao();
-                }
-            } catch (error) {
-                console.error('Erro ao marcar tarefa:', error);
-            }
-        }
-
-        // Atualizar descrição da tarefa
-        async function atualizarDescricao(id, descricao) {
-            try {
-                await fetch('/api/tarefa/atualizar-descricao/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({id: id, descricao: descricao})
-                });
-            } catch (error) {
-                console.error('Erro ao atualizar descrição:', error);
-            }
-        }
-
-        // Salvar campos de reflexão
-        async function salvarCamposReflexao() {
-            try {
-                const dados = {
-                    id: ENTRADA_ID,
-                    preciso_melhorar_em: document.getElementById('preciso-melhorar').value,
-                    coisa_que_me_orgulho: document.getElementById('orgulho').value,
-                    gratidao: document.getElementById('gratidao').value,
-                    reflexao: document.getElementById('reflexao').value
-                };
-
-                await fetch('/api/diario/campos-reflexao/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(dados)
-                });
-            } catch (error) {
-                console.error('Erro ao salvar reflexão:', error);
-            }
-        }
-
-        // Atualizar pontuação
-        function atualizarPontuacao() {
-            const checkboxesPrincipais = document.querySelectorAll('#tarefas-principais .checkbox.checked');
-            const checkboxesSecundarios = document.querySelectorAll('#tarefas-secundarias .checkbox.checked');
-
-            const totalPrincipais = document.querySelectorAll('#tarefas-principais .checkbox').length;
-            const totalSecundarios = document.querySelectorAll('#tarefas-secundarias .checkbox').length;
-
-            const pontosPrincipais = checkboxesPrincipais.length * 3;
-            const pontosSecundarios = checkboxesSecundarios.length * 1;
-            const totalPontos = pontosPrincipais + pontosSecundarios;
-
-            const maxPontos = (totalPrincipais * 3) + (totalSecundarios * 1);
-
-            document.getElementById('pontuacao').textContent = `${totalPontos} / ${maxPontos}`;
-        }
-
-        // Carregar tarefas existentes
-        function carregarTarefas() {
-            const tarefas = {{ tarefas|safe }};
-            tarefas.forEach(tarefa => {
-                renderizarTarefa(tarefa, tarefa.tipo);
-            });
-        }
-
-        // Inicializar
-        atualizarData();
-        carregarTarefas();
-        configurarDataMinima();
-
-        // ===== FUNÇÕES DO MODAL DE PLANEJAMENTO =====
-
-        function configurarDataMinima() {
-            const hoje = new Date();
-            const amanha = new Date(hoje);
-            amanha.setDate(amanha.getDate() + 1);
-
-            const ano = amanha.getFullYear();
-            const mes = String(amanha.getMonth() + 1).padStart(2, '0');
-            const dia = String(amanha.getDate()).padStart(2, '0');
-
-            document.getElementById('data-futura').min = `${ano}-${mes}-${dia}`;
-        }
-
-        function abrirModalPlanejamento() {
-            document.getElementById('modal-planejamento').classList.add('ativo');
-            document.getElementById('data-futura').value = '';
-            document.getElementById('tarefas-principais-modal').innerHTML = '';
-            document.getElementById('tarefas-secundarias-modal').innerHTML = '';
-        }
-
-        function fecharModalPlanejamento() {
-            const modal = document.getElementById('modal-planejamento');
-            modal.classList.remove('ativo');
-        }
-
-        // Fechar modal clicando no fundo escuro
-        document.getElementById('modal-planejamento').addEventListener('click', function(e) {
-            if (e.target === this) {
-                fecharModalPlanejamento();
-            }
-        });
-
-        async function adicionarTarefaFutura(tipo) {
-            const dataSelecionada = document.getElementById('data-futura').value;
-
-            if (!dataSelecionada) {
-                alert('Por favor, selecione uma data antes de adicionar tarefas!');
-                return;
-            }
-
-            // Converter formato de yyyy-mm-dd para dd/mm/yyyy
-            const [ano, mes, dia] = dataSelecionada.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
-
-            try {
-                const response = await fetch('/api/diario/tarefas-futuras/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        date: dataFormatada,
-                        tarefa_tipo: tipo,
-                        descricao: ''
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    renderizarTarefaModal(data, tipo);
-                    mostrarMensagemSucesso(`Tarefa adicionada para ${dataFormatada}`);
-                } else {
-                    alert(data.error || 'Erro ao adicionar tarefa');
-                }
-            } catch (error) {
-                console.error('Erro ao adicionar tarefa futura:', error);
-                alert('Erro ao adicionar tarefa');
-            }
-        }
-
-        function renderizarTarefaModal(tarefa, tipo) {
-            const container = tipo === 'PR' ?
-                document.getElementById('tarefas-principais-modal') :
-                document.getElementById('tarefas-secundarias-modal');
-
-            const tarefaDiv = document.createElement('div');
-            tarefaDiv.className = 'tarefa-item';
-            tarefaDiv.dataset.id = tarefa.id;
-
-            tarefaDiv.innerHTML = `
-                <input type="text" class="tarefa-texto"
-                       value="${tarefa.descricao}"
-                       onblur="atualizarDescricao(${tarefa.id}, this.value)"
-                       placeholder="Digite a tarefa..."
-                       style="flex: 1;">
-                <button class="btn-remover" onclick="removerTarefaModal(${tarefa.id})">✕</button>
-            `;
-
-            container.appendChild(tarefaDiv);
-        }
-
-        async function removerTarefaModal(id) {
-            try {
-                const response = await fetch('/api/tarefa/remover/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({id: id})
-                });
-
-                if (response.ok) {
-                    document.querySelector(`#modal-planejamento [data-id="${id}"]`).remove();
-                }
-            } catch (error) {
-                console.error('Erro ao remover tarefa:', error);
-            }
-        }
-
-        function mostrarMensagemSucesso(mensagem) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'mensagem-sucesso';
-            msgDiv.textContent = mensagem;
-            document.body.appendChild(msgDiv);
-
-            setTimeout(() => {
-                msgDiv.remove();
-            }, 3000);
-        }
-
-
-        function abrirModalConsultar() {
-            document.getElementById('modal-consultar').classList.add('ativo');
-            document.getElementById('data-consultar').value = '';
-            document.getElementById('tarefas-principais-consultar').innerHTML = '';
-            document.getElementById('tarefas-secundarias-consultar').innerHTML = '';
-            document.getElementById('info-data-consultada').innerHTML = '';
-        }
-
-        function fecharModalConsultar() {
-            document.getElementById('modal-consultar').classList.remove('ativo');
-        }
-
-        // Fechar modal clicando no fundo escuro
-        document.getElementById('modal-consultar').addEventListener('click', function(e) {
-            if (e.target === this) {
-                fecharModalConsultar();
-            }
-        });
-
-        async function buscarTarefasData() {
-            const dataSelecionada = document.getElementById('data-consultar').value;
-
-            if (!dataSelecionada) {
-                return;
-            }
-
-            // Converter formato de yyyy-mm-dd para dd/mm/yyyy
-            const [ano, mes, dia] = dataSelecionada.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
-
-            try {
-                const response = await fetch(`/api/diario/consultar-tarefas/?date=${dataFormatada}`, {
-                    method: 'GET',
-                    headers: {'Content-Type': 'application/json'}
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // Limpar containers
-                    document.getElementById('tarefas-principais-consultar').innerHTML = '';
-                    document.getElementById('tarefas-secundarias-consultar').innerHTML = '';
-
-                    // Mostrar info da data
-                    document.getElementById('info-data-consultada').innerHTML = `
-                        <div class="tarefas-consultadas-info">
-                            📅 Tarefas do dia ${dataFormatada}
-                        </div>
-                    `;
-
-                    // Pegar a chave que contém as tarefas (ela vem como "Tarefas do dia XX/XX/XXXX")
-                    const chaveTarefas = Object.keys(data)[0];
-                    const tarefas = data[chaveTarefas];
-
-                    // Verificar se tarefas é um array
-                    if (Array.isArray(tarefas) && tarefas.length > 0) {
-                        tarefas.forEach(tarefa => {
-                            renderizarTarefaConsultar(tarefa);
-                        });
-                    } else {
-                        document.getElementById('info-data-consultada').innerHTML = `
-                            <div class="tarefas-consultadas-info" style="background: #f8d7da; color: #721c24;">
-                                ⚠️ Nenhuma tarefa encontrada para esta data
-                            </div>
-                        `;
-                    }
-                } else {
-                    document.getElementById('info-data-consultada').innerHTML = `
-                        <div class="tarefas-consultadas-info" style="background: #f8d7da; color: #721c24;">
-                            ${data.error || 'Erro ao buscar tarefas'}
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('Erro ao buscar tarefas:', error);
-                alert('Erro ao buscar tarefas');
-            }
-        }
-
-        function renderizarTarefaConsultar(tarefa) {
-            const container = tarefa.tipo === 'PR' ?
-                document.getElementById('tarefas-principais-consultar') :
-                document.getElementById('tarefas-secundarias-consultar');
-
-            const tarefaDiv = document.createElement('div');
-            tarefaDiv.className = 'tarefa-item';
-            tarefaDiv.dataset.id = tarefa.id;
-
-            tarefaDiv.innerHTML = `
-                <div class="checkbox ${tarefa.concluida ? 'checked' : ''}"
-                     onclick="toggleCheckConsultar(this, ${tarefa.id})"></div>
-                <input type="text" class="tarefa-texto"
-                       value="${tarefa.descricao}"
-                       onblur="atualizarDescricao(${tarefa.id}, this.value)"
-                       placeholder="Digite a tarefa...">
-                <button class="btn-remover" onclick="removerTarefaConsultar(${tarefa.id})">✕</button>
-            `;
-
-            container.appendChild(tarefaDiv);
-        }
-
-        async function toggleCheckConsultar(element, id) {
-            try {
-                const estaChecado = element.classList.contains('checked');
-
-                const response = await fetch('/api/tarefa/toggle/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({id: id, concluida: estaChecado})
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    if (data.concluida) {
-                        element.classList.add('checked');
-                    } else {
-                        element.classList.remove('checked');
-                    }
-                }
-            } catch (error) {
-                console.error('Erro ao marcar tarefa:', error);
-            }
-        }
-
-        async function removerTarefaConsultar(id) {
-            try {
-                const response = await fetch('/api/tarefa/remover/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({id: id})
-                });
-
-                if (response.ok) {
-                    document.querySelector(`#modal-consultar [data-id="${id}"]`).remove();
-                }
-            } catch (error) {
-                console.error('Erro ao remover tarefa:', error);
-            }
-        }
-        async function adicionarTarefaConsultar(tipo) {
-            const dataSelecionada = document.getElementById('data-consultar').value;
-
-            if (!dataSelecionada) {
-                alert('Por favor, selecione uma data primeiro!');
-                return;
-            }
-
-            // Converter formato de yyyy-mm-dd para dd/mm/yyyy
-            const [ano, mes, dia] = dataSelecionada.split('-');
-            const dataFormatada = `${dia}/${mes}/${ano}`;
-
-            try {
-                const response = await fetch('/api/diario/tarefas-futuras/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        date: dataFormatada,
-                        tarefa_tipo: tipo,
-                        descricao: ''
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // Criar objeto tarefa com a estrutura correta
-                    const novaTarefa = {
-                        id: data.id,
-                        tipo: data.tipo,
-                        descricao: data.descricao,
-                        concluida: false
-                    };
-                    renderizarTarefaConsultar(novaTarefa);
-                    mostrarMensagemSucesso(`Tarefa adicionada para ${dataFormatada}`);
-                } else {
-                    alert(data.error || 'Erro ao adicionar tarefa');
-                }
-            } catch (error) {
-                console.error('Erro ao adicionar tarefa:', error);
-                alert('Erro ao adicionar tarefa');
-            }
-        }
-    </script>
-
-</body>
-</html>
+from json import JSONDecodeError
+from django.core.exceptions import ValidationError
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from .models import EntradaDiario, Tarefa
+from .services import Tarefas
+from django.utils import timezone
+from datetime import datetime, date
+import json
+from django.http import JsonResponse
+
+@csrf_exempt
+def adicionar_tarefas(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            entrada, created = EntradaDiario.objects.get_or_create(data=date.today())
+
+            tipo = data.get('tipo')
+            if tipo not in ['PR', 'SC']:
+                return JsonResponse({'error': 'Tipo desconhecido'}, status=400)
+
+            descricao = data.get('descricao')
+            if descricao is None:
+                descricao = ''
+            tarefa_add = Tarefa.objects.create(entrada_diario=entrada, tipo=tipo, descricao=descricao)
+
+            return JsonResponse({
+                'mensagem': 'Tarefa adicionada.',
+                'id': tarefa_add.id,
+                'entrada_diario': tarefa_add.entrada_diario.id,
+                'tipo': tarefa_add.tipo,
+                'descricao': tarefa_add.descricao,
+            })
+
+        except JSONDecodeError as e:
+            return JsonResponse({
+                'error': str(e),
+            }, status=500)
+
+        except Exception as e:
+            return JsonResponse({'mensagem': str(e)}, status=500)
+
+    else:
+        return JsonResponse({
+            'mensagem': 'Metodo não permitido.',
+        })
+
+@csrf_exempt
+def toggle_tarefa(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            id = data.get('id')
+            concluida = data.get('concluida')
+
+            if concluida == False:
+                tarefa_update = Tarefa.objects.filter(id=id).update(concluida=True)
+            else:
+                tarefa_update = Tarefa.objects.filter(id=id).update(concluida=False)
+
+            tarefa = Tarefa.objects.get(id=id)
+            return JsonResponse({
+                'mensagem': 'Tarefa atualizada.',
+                'id': tarefa.id,
+                'tarefa': tarefa.descricao,
+                'concluida': tarefa.concluida
+            })
+
+        except JSONDecodeError as e:
+            return JsonResponse({e})
+        except Exception as e:
+            return JsonResponse({'mensagem': str(e)}, status=500)
+    else:
+        return JsonResponse({'mensagem': 'metodo não permitido.'})
+@csrf_exempt
+def atualizar_descricao(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            id = data.get('id')
+            descricao = data.get('descricao')
+
+            if descricao:
+                tarefa = Tarefa.objects.filter(id=id).update(descricao=descricao)
+            else:
+                JsonResponse({'mensagem': 'Não foi passado nenhuma descricao.'})
+
+            tarefa_atualizada = Tarefa.objects.get(id=id)
+            pontuacao = tarefa_atualizada.entrada_diario.calcular_pontuacao()
+            return JsonResponse({
+                'mensagem': 'Tarefa atualizada.',
+                'id': tarefa_atualizada.id,
+                'tarefa': tarefa_atualizada.descricao,
+                'concluida': tarefa_atualizada.concluida,
+                'pontuacao': pontuacao
+            })
+
+
+        except Exception as e:
+            return JsonResponse({'mensagem': str(e)}, status=500)
+    else:
+        return JsonResponse({'mensagem': 'metodo não permitido.'})
+
+@csrf_exempt
+def remover_tarefa(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            id = data.get('id')
+            tarefa = Tarefa.objects.get(id=id)
+            tarefa.delete()
+            return JsonResponse({
+                'mensagem': 'Tarefa removida.',
+                'id': id,
+                'tarefa': tarefa.descricao,
+            })
+
+        except JSONDecodeError as e:
+            return JsonResponse({'error': e})
+        except Exception as e:
+            return JsonResponse({'mensagem error': str(e)}, status=500)
+    else:
+        return JsonResponse({'mensagem': 'metodo não permitido.'})
+
+@csrf_exempt
+def campos_gratidao(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            id = data.get('id')
+            preciso_melhorar_em = data.get('preciso_melhorar_em')
+            coisa_que_me_orgulho = data.get('coisa_que_me_orgulho')
+            gratidao = data.get('gratidao')
+            reflexao = data.get('reflexao')
+
+            if not id:
+                return JsonResponse({'mensagem': 'Passe o ID'})
+
+            diario = EntradaDiario.objects.get(id=id)
+            entrada_diario = EntradaDiario.objects.filter(id=id).update(
+                          preciso_melhorar_em=preciso_melhorar_em,
+                          coisa_que_me_orgulho=coisa_que_me_orgulho,
+                          gratidao=gratidao,
+                          reflexao=reflexao)
+            return JsonResponse({
+                'mensagem': 'Diario atualizado',
+                'id': diario.id,
+                'preciso_melhorar_em': preciso_melhorar_em,
+                'coisa_que_me_orgulho': coisa_que_me_orgulho,
+                'gratidao': gratidao,
+                'reflexao': reflexao
+            })
+
+        except JSONDecodeError as e:
+            return JsonResponse({'error': e})
+        except Exception as e:
+            return JsonResponse({'mensagem error': str(e)}, status=500)
+    else:
+        return JsonResponse({'mensagem': 'metodo não permitido.'})
+
+
+def pagina_diario(request):
+    entrada, created = EntradaDiario.objects.get_or_create(data=date.today())
+    tarefas = Tarefa.objects.filter(entrada_diario=entrada).order_by('ordem')
+    pontuacao = entrada.calcular_pontuacao()
+
+    # Converter tarefas para JSON
+    tarefas_json = json.dumps([{
+        'id': t.id,
+        'tipo': t.tipo,
+        'descricao': t.descricao,
+        'concluida': t.concluida
+    } for t in tarefas])
+
+    context = {
+        'entrada': entrada,
+        'tarefas': tarefas_json,
+        'pontuacao': pontuacao,
+        'data_hoje': date.today(),
+    }
+
+    return render(request, 'index.html', context)
+
+@csrf_exempt
+def definir_tarefas_futuras(request):
+    return Tarefas.definir_tarefas_futuras(request)
+
+@csrf_exempt
+def consultar_tarefas(request):
+    return Tarefas.consultar_dias(request)
