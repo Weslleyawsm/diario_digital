@@ -6,6 +6,34 @@
     <title>Diário Pessoal</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        .btn-consultar {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Caveat', cursive;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+
+        .btn-consultar:hover {
+            background: #229954;
+        }
+
+        .tarefas-consultadas-info {
+            background: #3a3a2f;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +42,7 @@
 
         body {
             font-family: 'Caveat', cursive;
-            background: linear-gradient(135deg, #2c3e50 0%, #1a1a1a 100%);
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
             min-height: 100vh;
             padding: 20px;
             display: flex;
@@ -22,13 +50,15 @@
             align-items: center;
         }
 
+
         .diario-container {
-            background: #f5f5f5;
+            background: #1e1e1e;
             width: 100%;
             max-width: 900px;
             border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             padding: 40px;
+            color: #e0e0e0;
         }
 
         .header {
@@ -39,8 +69,10 @@
         .data-dia {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             font-size: 20px;
             margin-bottom: 10px;
+            color: #e0e0e0;
         }
 
         .titulo {
@@ -48,6 +80,7 @@
             font-weight: bold;
             margin: 20px 0;
             letter-spacing: 2px;
+            color: #ffffff;
         }
 
         .frase-inspiradora {
@@ -55,13 +88,14 @@
             font-style: italic;
             margin: 20px 0;
             padding: 15px;
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.05);
             border-radius: 10px;
+            color: #b0b0b0;
         }
 
         .divisor {
             height: 2px;
-            background: #333;
+            background: #444;
             margin: 20px 0;
         }
 
@@ -73,23 +107,24 @@
 
         .tarefas-secao {
             flex: 1;
-            background: white;
+            background: #2d2d2d;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
         .tarefas-titulo {
             font-size: 14px;
             text-transform: uppercase;
             margin-bottom: 5px;
-            color: #666;
+            color: #888;
         }
 
         .tarefas-header {
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 20px;
+            color: #ffffff;
         }
 
         .tarefa-item {
@@ -102,13 +137,14 @@
         .checkbox {
             width: 30px;
             height: 30px;
-            border: 3px solid #333;
+            border: 3px solid #666;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            color: #ffffff;
         }
 
         .checkbox.checked::after {
@@ -126,6 +162,7 @@
             background: transparent;
             font-family: 'Caveat', cursive;
             transition: border-color 0.3s;
+            color: #e0e0e0;
         }
 
         .tarefa-texto:focus {
@@ -177,6 +214,7 @@
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 10px;
+            color: #ffffff;
         }
 
         .campo-input {
@@ -184,9 +222,10 @@
             font-size: 20px;
             padding: 10px;
             border: none;
-            border-bottom: 2px solid #333;
+            border-bottom: 2px solid #555;
             background: transparent;
             font-family: 'Caveat', cursive;
+            color: #e0e0e0;
         }
 
         .campo-input:focus {
@@ -198,15 +237,16 @@
             text-align: center;
             margin: 30px 0;
             padding: 20px;
-            background: white;
+            background: #2d2d2d;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
         .pontuacao-titulo {
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 10px;
+            color: #ffffff;
         }
 
         .pontuacao-valor {
@@ -223,16 +263,17 @@
 
         .secao-final {
             flex: 1;
-            background: white;
+            background: #2d2d2d;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
         .secao-titulo {
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 15px;
+            color: #ffffff;
         }
 
         .texto-area {
@@ -244,6 +285,7 @@
             background: transparent;
             font-family: 'Caveat', cursive;
             resize: vertical;
+            color: #e0e0e0;
         }
 
         .texto-area:focus {
@@ -259,13 +301,6 @@
             .diario-container {
                 padding: 20px;
             }
-        }
-        .data-dia {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 20px;
-            margin-bottom: 10px;
         }
 
         .btn-planejar {
@@ -302,7 +337,7 @@
         }
 
         .modal-container {
-            background: #f5f5f5;
+            background: #1e1e1e;
             width: 90%;
             max-width: 800px;
             max-height: 90vh;
@@ -310,6 +345,7 @@
             padding: 30px;
             position: relative;
             overflow-y: auto;
+            color: #e0e0e0;
         }
 
         .modal-header {
@@ -322,6 +358,7 @@
         .modal-titulo {
             font-size: 32px;
             font-weight: bold;
+            color: #ffffff;
         }
 
         .btn-fechar {
@@ -352,6 +389,7 @@
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 10px;
+            color: #ffffff;
         }
 
         .seletor-data {
@@ -359,11 +397,12 @@
             max-width: 300px;
             font-size: 20px;
             padding: 10px;
-            border: 2px solid #333;
+            border: 2px solid #555;
             border-radius: 8px;
-            background: white;
+            background: #2d2d2d;
             font-family: 'Caveat', cursive;
             cursor: pointer;
+            color: #e0e0e0;
         }
 
         .seletor-data:focus {
@@ -413,6 +452,7 @@
                     <span style="margin-left: 20px;">Dia: <strong id="dia-numero"></strong></span>
                 </div>
                 <button class="btn-planejar" onclick="abrirModalPlanejamento()">Planejar Dia Futuro</button>
+                <button class="btn-consultar" onclick="abrirModalConsultar()">Consultar Tarefas</button>
             </div>
             <div class="titulo">DIÁRIO</div>
             <div class="frase-inspiradora">
@@ -503,6 +543,40 @@
             </div>
         </div>
     </div>
+    <div class="modal-overlay" id="modal-consultar">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-titulo">Consultar Tarefas</div>
+                <button class="btn-fechar" onclick="fecharModalConsultar()">✕</button>
+            </div>
+
+            <div class="seletor-data-container">
+                <div class="seletor-data-label">Selecione a data:</div>
+                <input type="date" class="seletor-data" id="data-consultar" onchange="buscarTarefasData()">
+            </div>
+
+            <div id="info-data-consultada"></div>
+
+            <div class="divisor"></div>
+
+            <div class="modal-tarefas-container">
+                <div class="tarefas-secao">
+                    <div class="tarefas-titulo">3 pontos por tarefa completada</div>
+                    <div class="tarefas-header">Tarefas Principais</div>
+                    <div id="tarefas-principais-consultar"></div>
+                    <button class="btn-adicionar" onclick="adicionarTarefaConsultar('PR')">+ Adicionar Tarefa Principal</button>
+                </div>
+
+                <div class="tarefas-secao">
+                    <div class="tarefas-titulo">1 ponto por tarefa completada</div>
+                    <div class="tarefas-header">Tarefas Secundárias</div>
+                    <div id="tarefas-secundarias-consultar"></div>
+                    <button class="btn-adicionar" onclick="adicionarTarefaConsultar('SC')">+ Adicionar Tarefa Secundária</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         const ENTRADA_ID = {{ entrada.id }};
@@ -789,6 +863,191 @@
             setTimeout(() => {
                 msgDiv.remove();
             }, 3000);
+        }
+
+
+        function abrirModalConsultar() {
+            document.getElementById('modal-consultar').classList.add('ativo');
+            document.getElementById('data-consultar').value = '';
+            document.getElementById('tarefas-principais-consultar').innerHTML = '';
+            document.getElementById('tarefas-secundarias-consultar').innerHTML = '';
+            document.getElementById('info-data-consultada').innerHTML = '';
+        }
+
+        function fecharModalConsultar() {
+            document.getElementById('modal-consultar').classList.remove('ativo');
+        }
+
+        // Fechar modal clicando no fundo escuro
+        document.getElementById('modal-consultar').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModalConsultar();
+            }
+        });
+
+        async function buscarTarefasData() {
+            const dataSelecionada = document.getElementById('data-consultar').value;
+
+            if (!dataSelecionada) {
+                return;
+            }
+
+            // Converter formato de yyyy-mm-dd para dd/mm/yyyy
+            const [ano, mes, dia] = dataSelecionada.split('-');
+            const dataFormatada = `${dia}/${mes}/${ano}`;
+
+            try {
+                const response = await fetch(`/api/diario/consultar-tarefas/?date=${dataFormatada}`, {
+                    method: 'GET',
+                    headers: {'Content-Type': 'application/json'}
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Limpar containers
+                    document.getElementById('tarefas-principais-consultar').innerHTML = '';
+                    document.getElementById('tarefas-secundarias-consultar').innerHTML = '';
+
+                    // Mostrar info da data
+                    document.getElementById('info-data-consultada').innerHTML = `
+                        <div class="tarefas-consultadas-info">
+                            📅 Tarefas do dia ${dataFormatada}
+                        </div>
+                    `;
+
+                    // Pegar a chave que contém as tarefas (ela vem como "Tarefas do dia XX/XX/XXXX")
+                    const chaveTarefas = Object.keys(data)[0];
+                    const tarefas = data[chaveTarefas];
+
+                    // Verificar se tarefas é um array
+                    if (Array.isArray(tarefas) && tarefas.length > 0) {
+                        tarefas.forEach(tarefa => {
+                            renderizarTarefaConsultar(tarefa);
+                        });
+                    } else {
+                        document.getElementById('info-data-consultada').innerHTML = `
+                            <div class="tarefas-consultadas-info" style="background: #f8d7da; color: #721c24;">
+                                ⚠️ Nenhuma tarefa encontrada para esta data
+                            </div>
+                        `;
+                    }
+                } else {
+                    document.getElementById('info-data-consultada').innerHTML = `
+                        <div class="tarefas-consultadas-info" style="background: #f8d7da; color: #721c24;">
+                            ${data.error || 'Erro ao buscar tarefas'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erro ao buscar tarefas:', error);
+                alert('Erro ao buscar tarefas');
+            }
+        }
+
+        function renderizarTarefaConsultar(tarefa) {
+            const container = tarefa.tipo === 'PR' ?
+                document.getElementById('tarefas-principais-consultar') :
+                document.getElementById('tarefas-secundarias-consultar');
+
+            const tarefaDiv = document.createElement('div');
+            tarefaDiv.className = 'tarefa-item';
+            tarefaDiv.dataset.id = tarefa.id;
+
+            tarefaDiv.innerHTML = `
+                <div class="checkbox ${tarefa.concluida ? 'checked' : ''}"
+                     onclick="toggleCheckConsultar(this, ${tarefa.id})"></div>
+                <input type="text" class="tarefa-texto"
+                       value="${tarefa.descricao}"
+                       onblur="atualizarDescricao(${tarefa.id}, this.value)"
+                       placeholder="Digite a tarefa...">
+                <button class="btn-remover" onclick="removerTarefaConsultar(${tarefa.id})">✕</button>
+            `;
+
+            container.appendChild(tarefaDiv);
+        }
+
+        async function toggleCheckConsultar(element, id) {
+            try {
+                const estaChecado = element.classList.contains('checked');
+
+                const response = await fetch('/api/tarefa/toggle/', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({id: id, concluida: estaChecado})
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.concluida) {
+                        element.classList.add('checked');
+                    } else {
+                        element.classList.remove('checked');
+                    }
+                }
+            } catch (error) {
+                console.error('Erro ao marcar tarefa:', error);
+            }
+        }
+
+        async function removerTarefaConsultar(id) {
+            try {
+                const response = await fetch('/api/tarefa/remover/', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({id: id})
+                });
+
+                if (response.ok) {
+                    document.querySelector(`#modal-consultar [data-id="${id}"]`).remove();
+                }
+            } catch (error) {
+                console.error('Erro ao remover tarefa:', error);
+            }
+        }
+        async function adicionarTarefaConsultar(tipo) {
+            const dataSelecionada = document.getElementById('data-consultar').value;
+
+            if (!dataSelecionada) {
+                alert('Por favor, selecione uma data primeiro!');
+                return;
+            }
+
+            // Converter formato de yyyy-mm-dd para dd/mm/yyyy
+            const [ano, mes, dia] = dataSelecionada.split('-');
+            const dataFormatada = `${dia}/${mes}/${ano}`;
+
+            try {
+                const response = await fetch('/api/diario/tarefas-futuras/', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        date: dataFormatada,
+                        tarefa_tipo: tipo,
+                        descricao: ''
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Criar objeto tarefa com a estrutura correta
+                    const novaTarefa = {
+                        id: data.id,
+                        tipo: data.tipo,
+                        descricao: data.descricao,
+                        concluida: false
+                    };
+                    renderizarTarefaConsultar(novaTarefa);
+                    mostrarMensagemSucesso(`Tarefa adicionada para ${dataFormatada}`);
+                } else {
+                    alert(data.error || 'Erro ao adicionar tarefa');
+                }
+            } catch (error) {
+                console.error('Erro ao adicionar tarefa:', error);
+                alert('Erro ao adicionar tarefa');
+            }
         }
     </script>
 
