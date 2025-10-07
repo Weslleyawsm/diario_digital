@@ -16,8 +16,10 @@ class Tarefas:
             try:
                 data = json.loads(request.body)
                 date = data.get("date")
-                if not date:
-                    return JsonResponse({"error": "Nenhuma data selecionada"})
+                """if not date:
+                    return JsonResponse({"error": "Nenhuma data selecionada"})"""
+                #troquei o validate_date_df por validate_date_consulta pra fazer um teste. mas tenho que voltar dps por validate_date_df
+                date_formatado = Validators.validate_date_consulta(date)
 
                 tipo = data.get('tarefa_tipo')
                 if tipo not in ['PR', 'SC']: #tarefa pra vc fazer dps: crie uma validação para tipos de tarefas no serializers.py
@@ -26,7 +28,7 @@ class Tarefas:
                 descricao = data.get('descricao')
                 #validate_date = Validators.validate_date(date)
 
-                entrada, created = EntradaDiario.objects.get_or_create(data=datetime.strptime(date, '%d/%m/%Y').date())
+                entrada, created = EntradaDiario.objects.get_or_create(data=date_formatado)
                 tarefa_add = Tarefa.objects.create(entrada_diario=entrada, tipo=tipo, descricao=descricao)
 
                 return JsonResponse({
@@ -43,3 +45,31 @@ class Tarefas:
             return JsonResponse({
                 'mensagem': 'Metodo não permitido.',
             })
+
+    @staticmethod
+    def consultar_dias(request):
+        if request.method == "GET":
+            try:
+                date_params = request.GET.get("date")
+                date_formatado = Validators.validate_date_consulta(date_params)
+
+                date_bd = EntradaDiario.objects.filter(data=date_formatado).first()
+                if date_bd is None:
+                    return JsonResponse({"error": "Não há tarefas para esse dia!"})
+                id_date = date_bd.id
+
+                list_tarefas = []
+                tarefas = Tarefa.objects.filter(entrada_diario_id=id_date).values("id", "tipo", "descricao", "concluida")
+                for tarefa in tarefas:
+                    dict_tarefa = {
+                        'id': tarefa['id'],
+                        'tipo': tarefa['tipo'],
+                        'descricao': tarefa['descricao'],
+                        'concluida': tarefa['concluida'],
+                    }
+                    list_tarefas.append(dict_tarefa)
+                return JsonResponse({f"Tarefas do dia {date_formatado.strftime('%d/%m/%Y')}": list_tarefas})
+            except ValidationError:
+                return JsonResponse({"error": "Nenhuma data selecionada"})
+        else:
+            return JsonResponse({"error": "Nenhuma data selecionada"})
