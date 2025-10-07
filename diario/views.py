@@ -186,3 +186,7 @@ def pagina_diario(request):
 @csrf_exempt
 def definir_tarefas_futuras(request):
     return Tarefas.definir_tarefas_futuras(request)
+
+@csrf_exempt
+def consultar_tarefas(request):
+    return Tarefas.consultar_dias(request)
