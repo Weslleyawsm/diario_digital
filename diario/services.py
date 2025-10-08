@@ -8,6 +8,8 @@ from datetime import datetime, date
 import json
 from django.http import JsonResponse
 from .serializers import Validators
+from django.db.models import Count
+
 
 class Tarefas:
     @staticmethod
@@ -73,3 +75,33 @@ class Tarefas:
                 return JsonResponse({"error": "Nenhuma data selecionada"})
         else:
             return JsonResponse({"error": "Nenhuma data selecionada"})
+
+    @staticmethod
+    def metricas_tarefas(request):
+        if request.method == "GET":
+            periodo = request.GET.get("periodo")
+            try:
+                date_hoje, date_subtraido = Validators.validate_date_periodo(periodo)
+
+                # ✅ Usando 'tarefas' (com S)
+                data_periodo = EntradaDiario.objects.filter(
+                    data__gte=date_subtraido
+                ).annotate(
+                    quantidade=Count('tarefas')  # ← Aqui!
+                ).values('data', 'quantidade').order_by('-data')
+
+                # Formatar datas
+                list_dias = [
+                    {
+                        'date': entrada['data'].strftime("%d/%m/%Y"),
+                        'quantidade': entrada['quantidade']
+                    }
+                    for entrada in data_periodo
+                ]
+
+                return JsonResponse({'data': list_dias})
+
+            except ValidationError as e:
+                return JsonResponse({"error": f"Nenhuma data selecionada {str(e)}"})
+        else:
+            return JsonResponse({'mensagem': 'Metodo não permitido.'})
