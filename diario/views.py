@@ -183,10 +183,22 @@ def pagina_diario(request):
 
     return render(request, 'index.html', context)
 
-@csrf_exempt
-def definir_tarefas_futuras(request):
-    return Tarefas.definir_tarefas_futuras(request)
+def painel_dashboard(request):
+    return render(request, 'dashboard.html')
 
-@csrf_exempt
-def consultar_tarefas(request):
-    return Tarefas.consultar_dias(request)
+class UtilidadeTarefas:
+
+    @staticmethod
+    @csrf_exempt
+    def definir_tarefas_futuras(request):
+        return Tarefas.definir_tarefas_futuras(request)
+
+    @staticmethod
+    @csrf_exempt
+    def consultar_tarefas(request):
+        return Tarefas.consultar_dias(request)
+
+    @staticmethod
+    @csrf_exempt
+    def metricas_tarefas(request):
+        return Tarefas.metricas_tarefas(request)
