@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.utils import timezone, dates
-from datetime import datetime, timedelta, time, date
+from datetime import datetime, timedelta, time, date, timezone
 from .models import EntradaDiario
 
 class Validators:
@@ -31,3 +31,15 @@ class Validators:
             return data_formatada
         except ValueError as e:
             return ValidationError  ({'mensagem': str(e)})
+
+    @staticmethod
+    def validate_date_periodo(periodo):
+        if not periodo:
+            raise ValidationError("Deve ser passado um período!")
+        try:
+            date_hoje = datetime.now().date()
+            date_subtraido = date_hoje - timedelta(days=int(periodo))
+            return date_hoje, date_subtraido
+
+        except ValueError as e:
+            return ValidationError({'mensagem': str(e)})
