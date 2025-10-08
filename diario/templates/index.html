@@ -22,6 +22,22 @@
         .btn-consultar:hover {
             background: #229954;
         }
+        .btn-dashboard {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Caveat', cursive;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+
+        .btn-dashboard:hover {
+            background: #5568d3;
+        }
 
         .tarefas-consultadas-info {
             background: #3a3a2f;
@@ -453,6 +469,7 @@
                 </div>
                 <button class="btn-planejar" onclick="abrirModalPlanejamento()">Planejar Dia Futuro</button>
                 <button class="btn-consultar" onclick="abrirModalConsultar()">Consultar Tarefas</button>
+                <button class="btn-dashboard" onclick="irParaDashboard()">📊 Dashboard</button>
             </div>
             <div class="titulo">DIÁRIO</div>
             <div class="frase-inspiradora">
@@ -1048,6 +1065,9 @@
                 console.error('Erro ao adicionar tarefa:', error);
                 alert('Erro ao adicionar tarefa');
             }
+        }
+        function irParaDashboard() {
+            window.location.href = '/dashboard';
         }
     </script>
 
